@@ -17,10 +17,10 @@ export default function RootLayout({
         <NextUIProvider>
           <div className="relative flex flex-col h-screen">
             <Navbar />
-            <main className="container mx-auto max-w-7xl py-8 px-4 flex-grow">
+            <main className="container mx-auto max-w-7xl py-4 px-4 flex-grow">
               {children}
             </main>
-            <footer className="w-full flex items-center justify-center py-2 text-[14px] text-[#595959] bg-[#F2F2F2]">
+            <footer className="w-full flex items-center justify-center py-1 text-[14px] text-[#595959] bg-[#F2F2F2]">
               Copyright 2023 Online Shop
             </footer>
           </div>
