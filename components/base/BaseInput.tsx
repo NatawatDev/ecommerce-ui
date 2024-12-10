@@ -1,17 +1,9 @@
-import React, { ReactNode } from 'react'
-import { useFormContext, RegisterOptions } from 'react-hook-form'
+import React from 'react'
+import { useFormContext } from 'react-hook-form'
 import { Input } from "@nextui-org/input"
+import { IBaseInputProps } from '@/types/index'
+ 
 
-interface IBaseInputProps {
-  className?: string,
-  name: string,
-  validate?: RegisterOptions,
-  label?: ReactNode,
-  labelPlacement?: 'outside' | 'outside-left' | 'inside' | undefined,
-  placeholder?: string,
-  type?: 'text',
-  disabled?: boolean
-}
 
 const BaseInput: React.FC<IBaseInputProps> = ({ className, name, validate, label, labelPlacement, placeholder, type='text', disabled = false}) => {
   const { register, formState: { errors } } = useFormContext()

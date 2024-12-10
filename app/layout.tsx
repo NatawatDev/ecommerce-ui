@@ -2,7 +2,7 @@ import "@/styles/globals.css";
 
 import { NextUIProvider } from "@nextui-org/system";
 
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/navbar";
 
 
 export default function RootLayout({
@@ -12,7 +12,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head />
+      <head>
+        <title>Natawat - Ecommerce</title>
+        <meta name="description" content="The website is used as a tool for testing to apply for a full-stack developer position." />
+        <link rel="icon" href="/shopping-cart.svg" type="image/png" />
+      </head>
       <body>
         <NextUIProvider>
           <div className="relative flex flex-col h-screen">

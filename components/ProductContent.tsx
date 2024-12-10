@@ -6,6 +6,7 @@ import CardProduct from './CardProduct'
 import useFetch from '@/utils/useFetch'
 import { Input } from "@nextui-org/input"
 import { IProductItem } from '@/types/index'
+import Loading from '@/components/Loading'
 
 const ProductContent = () => {
   const options = [
@@ -37,7 +38,7 @@ const ProductContent = () => {
     }
   },[data, optionValue])
 
-  if (loading) return <div>Loading...</div>
+  if (loading) return <Loading></Loading>
   
   if (error) return <div>Error: {error}</div>
   
