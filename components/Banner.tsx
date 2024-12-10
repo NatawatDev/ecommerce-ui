@@ -20,7 +20,7 @@ const Banner: React.FC<BannerProps> = ({ bannerList }) => {
           {bannerList.map((item) => (
             <SwiperSlide key={item._id}>
               <div>
-                <img src={item.imageUrl} alt={item.name} className="w-full h-[150px] object-fit md:object-none md:h-[430px]" />
+                <img src={item.imageUrl} alt={`Banner ${item.name}`} className="w-full h-[150px] object-fit md:object-none md:h-[430px]" />
               </div>              
             </SwiperSlide>
           ))}
