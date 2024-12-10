@@ -21,9 +21,6 @@ interface BannerProps {
 }
 
 const Banner: React.FC<BannerProps> = ({ bannerList }) => {
-  // const routeToDetail = (id: string): void => {
-  //   console.log(id)
-  // }
   return (
     <>
       {bannerList.length > 0 && (
@@ -34,7 +31,7 @@ const Banner: React.FC<BannerProps> = ({ bannerList }) => {
           {bannerList.map((item) => (
             <SwiperSlide key={item._id}>
               <div>
-                <img src={item.imageUrl} alt={item.name} className="w-full h-[150px] object-fit md:object-contain" />
+                <img src={item.imageUrl} alt={item.name} className="w-full h-[150px] object-fit md:object-none md:h-[430px]" />
               </div>              
             </SwiperSlide>
           ))}

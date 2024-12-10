@@ -23,7 +23,7 @@ const Page = () => {
   if (error) return <div>Error: {error}</div>
 
   return (
-    <div>
+    <div className='w-full'>
       <Banner bannerList={bannerList} />
       <ProductContent />
     </div>
