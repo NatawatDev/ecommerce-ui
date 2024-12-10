@@ -12,7 +12,7 @@ const CardProduct:React.FC<any> = ({ productItem }) => {
     <Card className="border-none h-full cursor-pointer hover:bg-gray-200" radius="none">
       <div onClick={() => hanldeClickDetail(productItem._id)}>
         <CardBody className='p-0 flex-1'>
-          <img src={productItem.imageUrl} alt="" className="w-full h-full object-cover" />
+          <img src={productItem.imageUrl} alt={`Image of ${productItem.name}`} className="w-full h-full object-cover" />
         </CardBody>
         <CardFooter className="flex flex-col justify-start">
           <div className='p-6'>
