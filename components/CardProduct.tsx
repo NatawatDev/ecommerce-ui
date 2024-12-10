@@ -10,7 +10,7 @@ const CardProduct:React.FC<any> = ({ productItem }) => {
   }
   return (
     <Card className="border-none h-full cursor-pointer hover:bg-gray-200" radius="none">
-      <div onClick={() => hanldeClickDetail(productItem._id)}>
+      <button  onClick={() => hanldeClickDetail(productItem._id)}>
         <CardBody className='p-0 flex-1'>
           <img src={productItem.imageUrl} alt={`Image of ${productItem.name}`} className="w-full h-full object-cover" />
         </CardBody>
@@ -20,7 +20,7 @@ const CardProduct:React.FC<any> = ({ productItem }) => {
             <p className="text-default-500">฿ {formatPrice(productItem.price)}</p>
           </div>        
         </CardFooter>
-      </div>
+      </button>
     </Card>
   )
 }

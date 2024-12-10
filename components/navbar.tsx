@@ -15,17 +15,17 @@ const Navbar = () => {
     <NextUINavbar isBordered>
       <NavbarContent>
         {!isHomePage && (
-          <button onClick={() => router.back()}>
-            <ChevronLeft 
-            className='text-[#F6AA32] cursor-pointer'            
-            />
+          <button 
+            className="text-[#F6AA32] cursor-pointer bg-transparent border-none"
+            onClick={() => router.back()}
+          >
+            <ChevronLeft />
           </button>
-          
         )}
       </NavbarContent>
      <NavbarContent justify="center">
       <NavbarItem>
-        <img src="/asset/logo.png" alt="Online Shop Logo" />
+        <img src="/asset/logo.png" alt="online shop logo" />
       </NavbarItem>
      </NavbarContent>
      <NavbarContent justify="end">
