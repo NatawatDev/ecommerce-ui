@@ -1,15 +1,6 @@
-import React, { ReactNode } from "react"
+import React from "react"
 import { Button } from "@nextui-org/button"
-
-interface IBaseButtonProp {
-  icon?: ReactNode,
-  title?: string,
-  action?: () => void,
-  className?: string,
-  disabled?: boolean,
-  color?: "default" | "primary" | "secondary" | "success" | "warning" | "danger", 
-  variant?: "solid" | "bordered" | "light" | "flat" | "faded" | "shadow" | "ghost"
-}
+import { IBaseButtonProp } from '@/types/index' 
 
 const BaseButton: React.FC<IBaseButtonProp> = ({ title = '', action, disabled = false, className, variant, color, icon }) => {
   return (

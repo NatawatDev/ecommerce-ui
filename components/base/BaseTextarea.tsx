@@ -1,16 +1,7 @@
-import React, { ReactNode } from 'react'
-import { useFormContext, RegisterOptions } from 'react-hook-form'
+import React from 'react'
+import { useFormContext } from 'react-hook-form'
 import { Textarea } from "@nextui-org/input"
-
-interface IBaseInputProps {
-  className?: string,
-  name: string,
-  validate?: RegisterOptions,
-  label?: ReactNode,
-  labelPlacement?: 'outside' | 'outside-left' | 'inside' | undefined,
-  placeholder?: string,
-  disabled?: boolean
-}
+import { IBaseInputProps } from '@/types/index'
 
 const BaseTextarea: React.FC<IBaseInputProps> = ({ className, name, validate, label, labelPlacement, placeholder, disabled = false}) => {
   const { register, formState: { errors } } = useFormContext();

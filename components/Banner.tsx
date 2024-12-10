@@ -5,21 +5,10 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import { Pagination } from 'swiper/modules'
-
-interface BannerItem {
-  _id: string;
-  name: string;
-  description: string;
-  displayOrder: number;
-  imageUrl: string;
-  updatedAt: string;
-  createdAt: string;
-}
-
+import { IBannerItem } from '@/types/index'
 interface BannerProps {
-  bannerList: BannerItem[];
+  bannerList: IBannerItem[]
 }
-
 const Banner: React.FC<BannerProps> = ({ bannerList }) => {
   return (
     <>
