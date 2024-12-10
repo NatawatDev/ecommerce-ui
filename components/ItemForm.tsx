@@ -142,7 +142,7 @@ const ItemForm = () => {
                 <div className='flex items-center gap-2'>
                   <BaseButton action={handleFileClick} icon={<Upload/>} title='Upload' color='warning' variant='ghost' disabled={isSaving}/>
                   {fileName && <span>{fileName}</span>}
-                  {!fileName && id && productData && <img src={productData.imageUrl} alt="Product Image" className="w-20 h-20" />}
+                  {!fileName && id && productData && <img src={productData.imageUrl} alt="Preview Edit Product" className="w-20 h-20" />}
                 </div>
                 
                 <input 
