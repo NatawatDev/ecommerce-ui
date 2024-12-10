@@ -16,6 +16,7 @@ const Navbar = () => {
       <NavbarContent>
         {!isHomePage && (
           <button 
+            aria-label="Go back"
             className="text-[#F6AA32] cursor-pointer bg-transparent border-none"
             onClick={() => router.back()}
           >
@@ -25,7 +26,7 @@ const Navbar = () => {
       </NavbarContent>
      <NavbarContent justify="center">
       <NavbarItem>
-        <img src="/asset/logo.png" alt="online shop logo" />
+        <img src="/asset/logo.png" alt="Online shop logo" />
       </NavbarItem>
      </NavbarContent>
      <NavbarContent justify="end">
