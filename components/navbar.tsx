@@ -26,7 +26,7 @@ const Navbar = () => {
       </NavbarContent>
      <NavbarContent justify="center">
       <NavbarItem>
-        <img src="/asset/logo.png" alt="Online shop logo" />
+        <img src="/asset/logo.png" alt="Online Shop" />
       </NavbarItem>
      </NavbarContent>
      <NavbarContent justify="end">
