@@ -1,50 +1,22 @@
-'use client'
+import ProductDetailItem from "@/components/product/ProductDetailItem"
 
-import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
-import { useRouter } from 'next/navigation'
-import useFetch from '@/utils/useFetch'
-import formatPrice from '@/utils/formatPrice'
-import BaseButton from '@/components/base/BaseButton'
-import { Pencil } from 'lucide-react';
-import { IProductDetail } from '@/types/index'
-import Loading from '@/components/Loading'
+const url = process.env.NEXT_PUBLIC_DEV_URL
 
-const ProductDetail = () => {
-  const router = useRouter()
-  const { id } = useParams()
-  const { data, loading, error } = useFetch<IProductDetail>(`/products/${id}`)
-  const [product, setProduct] = useState<IProductDetail>()
+async function getProductDetail(id: string) {
+  const data = await fetch(`${url}/products/${id}`)
+  return await data.json()
+}
 
-  useEffect(() => {
-    if (data) {
-      setProduct(data)
-    }    
-  },[data])
+const page = async ({ params }: { params: { id: string } }) => {
+  const { id } = await params 
 
-  const handleEdit = (id: string) => {
-    router.push(`/item-form/${id}`);
-  };
-
-  if (loading) return <Loading></Loading>
-  
-  if (error) return <div>Error: {error}</div>
+  const productData = await getProductDetail(id)
 
   return (
-    <div>
-      {product && (
-        <div className='w-full flex flex-col md:flex-row md:justify-center md:pt-[64px] gap-5 mb-[150px]'>
-          <img className='md:w-full md:h-full' src={product.imageUrl} alt="Product Goods" />
-          <div className='md:flex md:flex-col md:gap-6'>
-            <p className='text-[20px] font-medium'>{product.name}</p>
-            <p className='text-[28px] md:text-[32px] font-medium'>฿ {formatPrice(product.price)}</p>
-            <p className='text-[14px]'>{product.description}</p>
-            <BaseButton action={() => handleEdit(product._id)} icon={<Pencil/>} title='Edit' color='warning' variant='ghost' className='w-[10%]'/>
-          </div>          
-        </div>        
-      )}      
-    </div>
+    <> 
+      <ProductDetailItem productDetail={productData} />
+    </>
   )
 }
 
-export default ProductDetail
+export default page

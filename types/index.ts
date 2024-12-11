@@ -9,7 +9,6 @@ export interface IProductItem {
 }
 
 export interface IProductDetail extends IProductItem {
-  _id: string,
   createdAt: string,
   description: string,
   quantity: number,
@@ -18,6 +17,10 @@ export interface IProductDetail extends IProductItem {
 
 export interface IProductProps {
   productList: IProductItem[]
+}
+
+export interface IProductDetailItemProps {
+  productDetail: IProductDetail
 }
 
 export interface IForm {
