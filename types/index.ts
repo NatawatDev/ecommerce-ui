@@ -16,6 +16,10 @@ export interface IProductDetail extends IProductItem {
   updatedAt?: string
 }
 
+export interface IProductProps {
+  productList: IProductItem[]
+}
+
 export interface IForm {
   name: string,
   description: string,
@@ -53,4 +57,8 @@ export interface IBannerItem {
   imageUrl: string;
   updatedAt: string;
   createdAt: string;
+}
+
+export interface IBannerProps {
+  bannerList: IBannerItem[]
 }

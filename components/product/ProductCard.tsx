@@ -3,7 +3,7 @@ import {Card, CardFooter, CardBody} from "@nextui-org/card"
 import formatPrice from '@/utils/formatPrice'
 import { useRouter } from 'next/navigation'
 
-const CardProduct:React.FC<any> = ({ productItem }) => {
+const ProductCard:React.FC<any> = ({ productItem }) => {
   const router = useRouter()
   const hanldeClickDetail = (id: string) => {
     router.push(`/detail/${id}`)
@@ -25,4 +25,4 @@ const CardProduct:React.FC<any> = ({ productItem }) => {
   )
 }
 
-export default CardProduct
+export default ProductCard
