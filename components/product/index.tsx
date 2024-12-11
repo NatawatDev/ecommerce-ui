@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import ProductCard from "./ProductCard"
 import { Select, SelectItem } from "@nextui-org/select"
 import { Input } from "@nextui-org/input"
@@ -14,13 +14,25 @@ const ProductContent = ({ productList }: IProductProps) => {
   const [optionValue, setOptionValue] = useState('1')
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const filteredProducts = productList.filter((product) =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  const filteredProducts = useMemo(() => {
+    return productList.filter((product) =>
+      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [productList, searchQuery]);
 
-  const handleSelectionChange = (keys: Set<string>):void => {
-    const selectedValue = Array.from(keys)[0]
-    setOptionValue(selectedValue)
+  const sortedProducts = useMemo(() => {
+    const productsToSort = [...filteredProducts];
+    if (optionValue === '1') {
+      return productsToSort.sort((a, b) => b.price - a.price);
+    } else if (optionValue === '2') {
+      return productsToSort.sort((a, b) => a.price - b.price);
+    }
+    return productsToSort;
+  }, [filteredProducts, optionValue]);
+
+  const handleSelectionChange = (keys: Set<React.Key>): void => {
+    const selectedValue = Array.from(keys)[0] as string;
+    setOptionValue(selectedValue);
   };
 
   return (
@@ -51,7 +63,7 @@ const ProductContent = ({ productList }: IProductProps) => {
       </div>        
       <div className='w-full'>
         <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
-        {filteredProducts.map((item) => (
+        {sortedProducts.map((item) => (
           <div key={item._id}>
             <ProductCard productItem={item}/>
           </div>            
