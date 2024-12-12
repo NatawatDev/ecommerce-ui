@@ -2,7 +2,9 @@ import ProductDetailItem from "@/components/product/ProductDetailItem"
 import Error from "@/components/Error"
 import apiRepo from "@/app/apiRepo"
 
-const Page = async ({ params }: { params: { id: string } }) => {
+type Params = Promise<{ id: string }>;
+
+const Page = async ({ params }: { params: Params }) => {
   const { id } = await params
   let productData = null
 
