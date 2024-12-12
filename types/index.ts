@@ -9,11 +9,18 @@ export interface IProductItem {
 }
 
 export interface IProductDetail extends IProductItem {
-  _id: string,
   createdAt: string,
   description: string,
   quantity: number,
   updatedAt?: string
+}
+
+export interface IProductProps {
+  productList: IProductItem[]
+}
+
+export interface IProductDetailItemProps {
+  productDetail: IProductDetail
 }
 
 export interface IForm {
@@ -42,6 +49,7 @@ export interface IBaseInputProps {
   labelPlacement?: 'outside' | 'outside-left' | 'inside' | undefined,
   placeholder?: string,
   type?: 'text',
+  onChange?: () => {},
   disabled?: boolean
 }
 
@@ -53,4 +61,8 @@ export interface IBannerItem {
   imageUrl: string;
   updatedAt: string;
   createdAt: string;
+}
+
+export interface IBannerProps {
+  bannerList: IBannerItem[]
 }

@@ -1,50 +1,38 @@
 'use client'
 
-import {Select, SelectItem} from "@nextui-org/select"
-import { useState, useEffect } from 'react'
-import CardProduct from './CardProduct'
-import useFetch from '@/utils/useFetch'
+import { useState, useMemo } from 'react'
+import ProductCard from "./ProductCard"
+import { Select, SelectItem } from "@nextui-org/select"
 import { Input } from "@nextui-org/input"
-import { IProductItem } from '@/types/index'
-import Loading from '@/components/Loading'
+import { IProductProps } from '@/types/index'
 
-const ProductContent = () => {
+const ProductContent:React.FC<IProductProps> = ({ productList }) => {
   const options = [
     { key: '1', label: 'Price : High - Low' },
     { key: '2', label: 'Price : Low - High' }
   ]
   const [optionValue, setOptionValue] = useState('1')
-  const [productList, setProductList] = useState<IProductItem[]>([])
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const filteredProducts = productList.filter((product) =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  const { data, loading, error } = useFetch<IProductItem[]>('/products')
+  const filteredProducts = useMemo(() => {
+    return productList.filter((product) =>
+      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [productList, searchQuery]);
 
-  const sortProducts = (products: IProductItem[], value: string) => {
-    if (value === '1') {
-      return [...products].sort((a, b) => b.price - a.price); // High to Low
-    } else if (value === '2') {
-      return [...products].sort((a, b) => a.price - b.price); // Low to High
+  const sortedProducts = useMemo(() => {
+    const productsToSort = [...filteredProducts];
+    if (optionValue === '1') {
+      return productsToSort.sort((a, b) => b.price - a.price);
+    } else if (optionValue === '2') {
+      return productsToSort.sort((a, b) => a.price - b.price);
     }
-    return products;
-  };
+    return productsToSort;
+  }, [filteredProducts, optionValue]);
 
-  useEffect(() => {
-    if (data) {
-      const sortedData = sortProducts(data, optionValue);
-      setProductList(sortedData)
-    }
-  },[data, optionValue])
-
-  if (loading) return <Loading></Loading>
-  
-  if (error) return <div>Error: {error}</div>
-  
-  const handleSelectionChange = (keys: Set<string>):void => {
-    const selectedValue = Array.from(keys)[0]
-    setOptionValue(selectedValue)
+  const handleSelectionChange = (keys: Set<React.Key>): void => {
+    const selectedValue = Array.from(keys)[0] as string;
+    setOptionValue(selectedValue);
   };
 
   return (
@@ -75,9 +63,9 @@ const ProductContent = () => {
       </div>        
       <div className='w-full'>
         <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
-        {filteredProducts.map((item) => (
+        {sortedProducts.map((item) => (
           <div key={item._id}>
-            <CardProduct productItem={item}/>
+            <ProductCard productItem={item}/>
           </div>            
         ))}   
         </div>               

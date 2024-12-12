@@ -1,32 +1,24 @@
-'use client'
-
-import { useState, useEffect } from 'react'
-import Banner from '@/components/Banner'
-import ProductContent from '@/components/ProductContent'
-import useFetch from '@/utils/useFetch'
-import { IBannerItem } from '@/types/index'
+import Banner from '@/components/banner'
+import Product from '@/components/product'
 import Loading from '@/components/Loading'
+import apiRepo from './apiRepo'
 
-const Page = () => {
-  const [bannerList, setBannerList] = useState<IBannerItem[]>([])
 
-  const { data, loading, error } = useFetch<IBannerItem[]>('/banners')
+
+const Page = async() => {
+  const bannerData = await apiRepo.getBannerList()
+  const productData = await apiRepo.getProductList()
+
+  const [bannerList, productList] = await Promise.all([bannerData.data, productData.data])
   
-  useEffect(() => {
-    if (data) {
-      setBannerList(data)
-    }
-   
-  }, [data])
 
-  if (loading) return <Loading></Loading>
-  
-  if (error) return <div>Error: {error}</div>
-
+  if (!bannerList || !productList) {
+    return <Loading />
+  }
   return (
     <div className='w-full'>
-      <Banner bannerList={bannerList} />
-      <ProductContent />
+      <Banner bannerList={bannerList}/>
+      <Product productList={productList} />
     </div>
   );
 };

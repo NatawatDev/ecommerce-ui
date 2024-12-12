@@ -6,10 +6,12 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import { Pagination } from 'swiper/modules'
 import { IBannerItem } from '@/types/index'
+
 interface BannerProps {
   bannerList: IBannerItem[]
 }
-const Banner: React.FC<BannerProps> = ({ bannerList }) => {
+
+const BannerItem: React.FC<BannerProps> = ({ bannerList }) => {
   return (
     <>
       {bannerList.length > 0 && (
@@ -27,7 +29,7 @@ const Banner: React.FC<BannerProps> = ({ bannerList }) => {
         </Swiper>
       )}
     </>
-  );
-};
+  )
+}
 
-export default Banner
+export default BannerItem
