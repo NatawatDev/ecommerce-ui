@@ -6,7 +6,7 @@ import { Select, SelectItem } from "@nextui-org/select"
 import { Input } from "@nextui-org/input"
 import { IProductProps } from '@/types/index'
 
-const ProductContent = ({ productList }: IProductProps) => {
+const ProductContent:React.FC<IProductProps> = ({ productList }) => {
   const options = [
     { key: '1', label: 'Price : High - Low' },
     { key: '2', label: 'Price : Low - High' }

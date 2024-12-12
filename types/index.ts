@@ -49,6 +49,7 @@ export interface IBaseInputProps {
   labelPlacement?: 'outside' | 'outside-left' | 'inside' | undefined,
   placeholder?: string,
   type?: 'text',
+  onChange?: () => {},
   disabled?: boolean
 }
 

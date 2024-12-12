@@ -1,16 +1,23 @@
 import ProductDetailItem from "@/components/product/ProductDetailItem"
+import Error from "@/components/Error"
+import apiRepo from "@/app/apiRepo"
 
-const url = process.env.NEXT_PUBLIC_DEV_URL
+const Page = async ({ params }: { params: { id: string } }) => {
+  const { id } = await params
+  let productData = null
 
-async function getProductDetail(id: string) {
-  const data = await fetch(`${url}/products/${id}`)
-  return await data.json()
-}
+  try {
+    const response = await apiRepo.getProductDetail(id)
 
-const page = async ({ params }: { params: { id: string } }) => {
-  const { id } = await params 
-
-  const productData = await getProductDetail(id)
+    if (response.status === 200) {
+      productData = response.data
+    } else {
+      return <Error message={response.data.message}/>
+    }
+  } catch (error) {
+    console.log(error)    
+    return <Error message='An unknown error occurred'/>
+  }
 
   return (
     <> 
@@ -19,4 +26,4 @@ const page = async ({ params }: { params: { id: string } }) => {
   )
 }
 
-export default page
+export default Page

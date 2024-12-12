@@ -4,9 +4,9 @@ import { useRouter } from 'next/navigation'
 import formatPrice from '@/utils/formatPrice'
 import BaseButton from '@/components/base/BaseButton'
 import { Pencil } from 'lucide-react';
-import { IProductDetail } from '@/types/index'
+import { IProductDetailItemProps } from '@/types/index'
 
-const ProductDetailItem:React.FC<IProductDetail> = ({ productDetail }) => {
+const ProductDetailItem:React.FC<IProductDetailItemProps> = ({ productDetail }) => {
   const router = useRouter()
 
   const handleEdit = (id: string) => {

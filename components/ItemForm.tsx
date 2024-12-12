@@ -9,6 +9,8 @@ import BaseTextarea from './base/BaseTextarea'
 import BaseButton from './base/BaseButton'
 import { showSuccessAlert,showErrorAlert } from '../utils/systemAlert'
 import { IForm } from '@/types/index'
+import apiRepo from '@/app/apiRepo'
+import Loading from './Loading'
 
 const ItemForm = () => {
   const [isSaving, setIsSaving] = useState<boolean>(false)
@@ -26,22 +28,25 @@ const ItemForm = () => {
     }
   }, [id])
 
+  useEffect(() => {
+    if (id && productData) {
+      formMethods.reset(productData)
+    }
+  }, [id, productData])
+
   const fetchProductById = async (id: string) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_DEV_URL}/products/${id}`)
-      if (response.ok) {
-        const data = await response.json()
-        setProductData(data)
-        formMethods.reset(data)
+      const response = await apiRepo.getProductDetail(id)
+      if (response.status === 200) {
+        setProductData(response.data)        
       } else {
         showErrorAlert('Product not found')
       }
     } catch (error: any) {
-      console.error('Error:', error)
       showErrorAlert(error.message || 'An error occurred while fetching product data.')
     }
   }
-
+  
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
     if (file) {
@@ -79,88 +84,121 @@ const ItemForm = () => {
   }
 
   const createProduct = async (formData: FormData) => {
+    setIsSaving(true)
+
     try {
-      setIsSaving(true)
+      const response = await apiRepo.createProduct(formData)
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_DEV_URL}/products`, {
-        method: 'POST',
-        body: formData,
-      })
-
-      if (response.ok) {
-        const data = await response.json()
+      if (response.status === 201) {
         setIsSaving(false)
         showSuccessAlert('Created product successfully!')
         router.push('/')
       } else {
-        const errorData = await response.json()
         setIsSaving(false)
-        showErrorAlert(errorData.message || 'An error occurred while creating the product.')
+        showErrorAlert(response.data.message || 'An error occurred while creating the product.')
       }
-    } catch (error: any) {
+    } catch (error) {
       setIsSaving(false)
-      console.error('Error:', error)
-      showErrorAlert(error.message || 'An unknown error occurred.')
+      showErrorAlert('An error occurred while creating the product.')
     }
   }
 
   const updateProduct = async (id: string, formData: FormData) => {
+    setIsSaving(true)
     try {
-      setIsSaving(true)
+      const response = await apiRepo.updateProduct(id, formData)
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_DEV_URL}/products/${id}`, {
-        method: 'PUT',
-        body: formData,
-      })
-
-      if (response.ok) {
-        const data = await response.json()
+      if (response.status === 200) {
         setIsSaving(false)
         showSuccessAlert('Updated product successfully!')
         router.push('/')
       } else {
-        const errorData = await response.json()
         setIsSaving(false)
-        showErrorAlert(errorData.message || 'An error occurred while updating the product.')
+        showErrorAlert(response.data.message || 'An error occurred while updating the product.')
       }
-    } catch (error: any) {
+    } catch (error) {
       setIsSaving(false)
-      console.error('Error:', error)
-      showErrorAlert(error.message || 'An unknown error occurred.')
+      showErrorAlert('An error occurred while updating the product.')
     }
   }
 
   return (
     <FormProvider {...formMethods}>
-      <form onSubmit={formMethods.handleSubmit(handleSubmit)}>
-        <div className='text-center'>
-          <p className='text-[20px] font-medium'>Add/Edit Item</p>
-          <div className='flex flex-col gap-4'>
-            <div className='flex pt-6'>           
-              <div>
-                <p className='text-left pb-2'>Image</p>
-                <div className='flex items-center gap-2'>
-                  <BaseButton action={handleFileClick} icon={<Upload/>} title='Upload' color='warning' variant='ghost' disabled={isSaving}/>
-                  {fileName && <span>{fileName}</span>}
-                  {!fileName && id && productData && <img src={productData.imageUrl} alt="Preview Edit Product" className="w-20 h-20" />}
+    <form onSubmit={formMethods.handleSubmit(handleSubmit)}>
+      <div className="text-center">
+        <p className="text-[20px] font-medium">{id ? "Edit Item" : "Add Item"}</p>
+        <div className="flex flex-col gap-4">
+          {id && !productData ? (
+            <Loading/>
+          ) : (
+            <>
+              <div className="flex pt-6">
+                <div>
+                  <p className="text-left pb-2">Image</p>
+                  <div className="flex items-center gap-2">
+                    <BaseButton
+                      action={handleFileClick}
+                      icon={<Upload />}
+                      title="Upload"
+                      color="warning"
+                      variant="ghost"
+                      disabled={isSaving}
+                    />
+                    {fileName && <span>{fileName}</span>}
+                    {!fileName && id && productData && (
+                      <img src={productData.imageUrl} alt="Preview Edit Product" className="w-20 h-20" />
+                    )}
+                  </div>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    style={{ display: "none" }}
+                  />
                 </div>
-                
-                <input 
-                  type="file" 
-                  ref={fileInputRef} 
-                  onChange={handleFileChange} 
-                  style={{ display: 'none' }}
-                />            
-              </div>          
-            </div>
-            <BaseInput placeholder='Name' name='name' label='Name' labelPlacement='outside' validate={{ required: 'This field is required' }} disabled={isSaving}/>
-            <BaseTextarea placeholder="Enter your description" name='description' label="Description" labelPlacement="outside" validate={{required: 'This field is required'}} disabled={isSaving}/>           
-            <BaseInput placeholder='Quantity' name='quantity' label='Quantity' labelPlacement='outside' validate={{required: 'This field is required'}}  disabled={isSaving}/>
-            <BaseInput placeholder='Price (Baht)' name='price' label='Price' labelPlacement='outside' validate={{required: 'This field is required'}} disabled={isSaving}/>
-            <BaseButton action={formMethods.handleSubmit(handleSubmit)} title='Save' color='warning' className='w-full' disabled={isSaving} />
-          </div>
+              </div>
+
+              <BaseInput
+                placeholder="Name"
+                name="name"
+                label="Name"
+                validate={{ required: "This field is required" }}
+                disabled={isSaving}
+              />
+              <BaseTextarea
+                placeholder="Enter your description"
+                name="description"
+                label="Description"
+                labelPlacement="outside"
+                validate={{ required: "This field is required" }}
+                disabled={isSaving}
+              />
+              <BaseInput
+                placeholder="Quantity"
+                name="quantity"
+                label="Quantity"
+                validate={{ required: "This field is required" }}
+                disabled={isSaving}
+              />
+              <BaseInput
+                placeholder="Price (Baht)"
+                name="price"
+                label="Price"
+                validate={{ required: "This field is required" }}
+                disabled={isSaving}
+              />
+              <BaseButton
+                action={formMethods.handleSubmit(handleSubmit)}
+                title={id ? "Save" : "Add"}
+                color="warning"
+                className="w-full"
+                disabled={isSaving}
+              />
+            </>
+          )}
         </div>
-      </form>
+      </div>
+    </form>
   </FormProvider>
   )
 }

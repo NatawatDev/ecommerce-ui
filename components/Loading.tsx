@@ -1,10 +1,9 @@
 import React from 'react'
 import { Skeleton } from "@nextui-org/skeleton"
-import { Card } from "@nextui-org/card"
 
 const Loading = () => {
   return (
-    <Card className="w-full space-y-6 p-6" radius="lg">
+    <div className="w-full space-y-6 p-6">
       <Skeleton className="rounded-lg">
         <div className="h-[300px] rounded-lg bg-default-300" />
       </Skeleton>
@@ -24,7 +23,7 @@ const Loading = () => {
           </div>
         ))}
       </div>
-    </Card>
+    </div>
   )
 }
 
