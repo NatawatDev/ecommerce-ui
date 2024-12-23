@@ -3,22 +3,15 @@ import Product from '@/components/product'
 import Loading from '@/components/Loading'
 import apiRepo from './apiRepo'
 
-
-
 const Page = async() => {
   const bannerData = await apiRepo.getBannerList()
-  const productData = await apiRepo.getProductList()
-
-  const [bannerList, productList] = await Promise.all([bannerData.data, productData.data])
-  
-
-  if (!bannerList || !productList) {
+  if (!bannerData) {
     return <Loading />
   }
   return (
     <div className='w-full'>
-      <Banner bannerList={bannerList}/>
-      <Product productList={productList} />
+      <Banner bannerList={bannerData.data}/>
+      <Product/>
     </div>
   );
 };
