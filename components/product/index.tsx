@@ -1,49 +1,62 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import ProductCard from "./ProductCard"
+import ProductSearchItem from './ProductSearchItem'
 import { Select, SelectItem } from "@nextui-org/select"
-import { Input } from "@nextui-org/input"
-import { IProductProps } from '@/types/index'
+import { Pagination } from '@nextui-org/pagination'
+import apiRepo from '@/app/apiRepo'
+import { IProductItem } from '@/types/index'
 
-const ProductContent:React.FC<IProductProps> = ({ productList }) => {
+const ProductContent = () => {
   const options = [
     { key: '1', label: 'Price : High - Low' },
     { key: '2', label: 'Price : Low - High' }
   ]
   const [optionValue, setOptionValue] = useState('1')
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [productList, setProductList] = useState<IProductItem[]>([])
 
-  const filteredProducts = useMemo(() => {
-    return productList.filter((product) =>
-      product.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [productList, searchQuery]);
+  const limit = 8
+
+  useEffect(() => {
+    fecthProduct(limit, 0)
+  }, [])
 
   const sortedProducts = useMemo(() => {
-    const productsToSort = [...filteredProducts];
+    const productsToSort = [...productList];
     if (optionValue === '1') {
-      return productsToSort.sort((a, b) => b.price - a.price);
+      return productList.sort((a, b) => b.price - a.price);
     } else if (optionValue === '2') {
-      return productsToSort.sort((a, b) => a.price - b.price);
+      return productList.sort((a, b) => a.price - b.price);
     }
     return productsToSort;
-  }, [filteredProducts, optionValue]);
+  }, [productList, optionValue]);
 
   const handleSelectionChange = (keys: Set<React.Key>): void => {
     const selectedValue = Array.from(keys)[0] as string;
     setOptionValue(selectedValue);
   };
 
+  const handlePageChange = (page: number): void => {    
+    const pageOffset = page * limit
+    fecthProduct(limit, pageOffset)
+  }
+
+  const fecthProduct = async (pageLimit: number, pageOffset: number) => {
+    try {
+      const response = await apiRepo.getProductList(pageLimit, pageOffset)
+      setProductList(response.data) 
+    } catch (error) {
+      console.log(error)
+    }    
+  }
+
   return (
     <div>
       <div className='w-full my-4'>
         <p className='text-center text-[20px] font-medium' >NEW ARRIVALS</p>
         <div className='flex justify-center w-full md:justify-between items-center py-4 gap-4 text-[14px]'>
-          <div className="flex items-center gap-4 text-[14px] w-[25%] hidden md:flex inline">
-            <p>Search</p>
-            <Input variant='bordered' radius="none" placeholder="Search by name" onValueChange={(e) => setSearchQuery(e)}/>
-          </div>
+          <ProductSearchItem/>          
           <div className="flex items-center gap-4 text-[14px] w-[25%]">
             <p className="whitespace-nowrap">Sort By</p>
             <Select
@@ -65,9 +78,12 @@ const ProductContent:React.FC<IProductProps> = ({ productList }) => {
         <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
         {sortedProducts.map((item) => (
           <div key={item._id}>
-            <ProductCard productItem={item}/>
+            <ProductCard productItem={item}/>            
           </div>            
-        ))}   
+        ))}                 
+        </div>
+        <div className='flex justify-center my-[40px]'>
+          <Pagination onChange={handlePageChange} showControls initialPage={1} total={2} />
         </div>               
       </div>
     </div>
