@@ -8,14 +8,14 @@ import BaseInput from './base/BaseInput'
 import BaseTextarea from './base/BaseTextarea'
 import BaseButton from './base/BaseButton'
 import { showSuccessAlert,showErrorAlert } from '../utils/systemAlert'
-import { IForm } from '@/types/index'
+import { IForm, IProductDetail } from '@/types/index'
 import apiRepo from '@/app/apiRepo'
 import Loading from './Loading'
 
 const ItemForm = () => {
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [fileName, setFileName] = useState<string>('')
-  const [productData, setProductData] = useState<any | null>(null)
+  const [productData, setProductData] = useState<IProductDetail | null>(null)
 
   const formMethods = useForm<IForm>()
   const router = useRouter()
@@ -42,8 +42,12 @@ const ItemForm = () => {
       } else {
         showErrorAlert('Product not found')
       }
-    } catch (error: any) {
-      showErrorAlert(error.message || 'An error occurred while fetching product data.')
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        showErrorAlert(error.message || 'An error occurred while fetching product data.');
+      } else {
+        showErrorAlert('An unknown error occurred.');
+      }
     }
   }
   
@@ -58,13 +62,13 @@ const ItemForm = () => {
     fileInputRef.current?.click()
   }
 
-  const handleSubmit = (data: any) => {
+  const handleSubmit = (data: IForm) => {
     const formData = new FormData()
 
     formData.append('name', data.name)
     formData.append('description', data.description)
-    formData.append('quantity', data.quantity)
-    formData.append('price', data.price)
+    formData.append('quantity', data.quantity.toString())
+    formData.append('price', data.price.toString())
 
     if (!id && !fileInputRef.current?.files?.[0]) {
       showErrorAlert('Please attach a file before saving.')

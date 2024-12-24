@@ -1,11 +1,16 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
-import ProductCard from "./ProductCard"
-import ProductSearchItem from './ProductSearchItem'
 import { Select, SelectItem } from "@nextui-org/select"
 import { Pagination } from '@nextui-org/pagination'
+
 import apiRepo from '@/app/apiRepo'
+import { showErrorAlert } from '@/utils/systemAlert'
+
+import ProductCard from "./ProductCard"
+import ProductSearchItem from './ProductSearchItem'
+import Loading from '../Loading'
+
 import { IProductItem } from '@/types/index'
 
 const ProductContent = () => {
@@ -15,6 +20,7 @@ const ProductContent = () => {
   ]
   const [optionValue, setOptionValue] = useState('1')
   const [productList, setProductList] = useState<IProductItem[]>([])
+  const [isLoading, setIsLoading] = useState<Boolean>(true)
 
   const limit = 8
 
@@ -45,11 +51,27 @@ const ProductContent = () => {
   const fecthProduct = async (pageLimit: number, pageOffset: number) => {
     try {
       const response = await apiRepo.getProductList(pageLimit, pageOffset)
-      setProductList(response.data) 
-    } catch (error) {
-      console.log(error)
+
+      if (response.status === 200) {
+        setIsLoading(false)
+        setProductList(response.data) 
+      } else {
+        setIsLoading(false)
+        showErrorAlert(response.data.message || 'Cannot Fectch Products.')
+      }
+      
+    } catch (error: unknown) {
+      setIsLoading(false)
+      if (error instanceof Error) {
+        showErrorAlert(error.message || 'An error occurred while fetching product data.');
+      } else {
+        showErrorAlert('An unknown error occurred.');
+      }      
     }    
   }
+
+  if (isLoading) return <Loading/>
+  
 
   return (
     <div>

@@ -8,6 +8,10 @@ export interface IProductItem {
   imageUrl: string
 }
 
+export interface IProductItemProps {
+  productItem: IProductItem
+}
+
 export interface IProductDetail extends IProductItem {
   createdAt: string,
   description: string,

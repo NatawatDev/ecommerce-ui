@@ -3,7 +3,9 @@ import {Card, CardFooter, CardBody} from "@nextui-org/card"
 import formatPrice from '@/utils/formatPrice'
 import { useRouter } from 'next/navigation'
 
-const ProductCard:React.FC<any> = ({ productItem }) => {
+import { IProductItemProps } from '@/types'
+
+const ProductCard:React.FC<IProductItemProps> = ({ productItem }) => {
   const router = useRouter()
   const hanldeClickDetail = (id: string) => {
     router.push(`/detail/${id}`)

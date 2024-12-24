@@ -2,9 +2,14 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation';
-import apiRepo from '@/app/apiRepo';
-import { IProductItem } from '@/types/index'
+import { showErrorAlert } from '@/utils/systemAlert'
+
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
+
+import apiRepo from '@/app/apiRepo';
+
+import { IProductItem } from '@/types/index'
+
 
 const ProductSearchItem = () => {
   const router = useRouter()
@@ -25,11 +30,19 @@ const ProductSearchItem = () => {
   const fetchProductByName = async (name: string) => {
     try {
       const response = await apiRepo.getProductByName(name)
-      setProductItem(response.data)
-    } catch (error) {
-      console.log(error)
+      if (response.status === 200) {
+        setProductItem(response.data)
+      } else {
+        showErrorAlert('Cannot fecth products.')
+      }
+      
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        showErrorAlert(error.message || 'An error occurred while fetching product data.');
+      } else {
+        showErrorAlert('An unknown error occurred.');
+      }
     }
-
   }
 
   return (
