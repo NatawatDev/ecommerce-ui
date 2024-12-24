@@ -39,7 +39,7 @@ const ProductContent = () => {
   }, [productList, optionValue]);
 
   const handleSelectionChange = (keys: Set<React.Key>): void => {
-    const selectedValue = Array.from(keys)[0] as string;
+    const selectedValue = Array.from(keys).join(", ")
     setOptionValue(selectedValue);
   };
 
