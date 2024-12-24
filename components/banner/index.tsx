@@ -1,7 +1,16 @@
 import BannerItem from './BannerItem'
-import { IBannerProps } from '@/types/index'
+import Loading from '@/components/Loading'
+import apiRepo from '@/app/apiRepo'
 
-const Banner = async ({ bannerList }:IBannerProps ) => {
+const Banner = async () => {
+
+  const bannerData = await apiRepo.getBannerList()
+  const bannerList = bannerData.data
+  
+  if (!bannerData) {
+    return <Loading />
+  }
+
   return (
     <>
       <BannerItem bannerList={bannerList}/>
